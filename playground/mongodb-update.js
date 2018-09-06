@@ -19,7 +19,7 @@ MongoClient.connect(
 			)
 			.then(res => console.log(res))
 
-		// * findOneAndUpdate
+		// * findOneAndUpdate by ID $inc User age by 1
 		db.collection('Users')
 			.findOneAndUpdate(
 				{ _id: new ObjectID('5b908c930758b710a4eac652') },
