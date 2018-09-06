@@ -5,6 +5,8 @@
   "author": "Jeremy Swanborough",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
     "mongodb": "^3.1.4",
     "mongoose": "^5.2.13"
   },

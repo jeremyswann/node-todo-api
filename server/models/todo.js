@@ -7,17 +7,4 @@ const schema = new mongoose.Schema({
 })
 const Todo = mongoose.model('Todo', schema)
 
-// const newTodo = new Todo({
-// 	text: 'Cook dinner',
-// })
-
-// newTodo.save().then(
-// 	doc => {
-// 		console.log('Saved Todo', JSON.stringify(doc, undefined, 2))
-// 	},
-// 	err => {
-// 		console.log('Unable to save Todo', JSON.stringify(err, undefined, 2))
-// 	}
-// )
-
 module.exports = { Todo }
