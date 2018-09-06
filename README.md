@@ -11,7 +11,7 @@ A noSQL todo list API
 ## Installation:
 1. Clone the repo using `git` and open the notebook `dir`
 ```console
-λ git clone https://github.com/jeremyswann/node-todo-api.git weather
+λ git clone https://github.com/jeremyswann/node-todo-api.git node-todo-api
 λ cd node-todo-api
 ```
 2. Install the app using `yarn`
