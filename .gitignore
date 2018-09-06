@@ -1,0 +1,6 @@
+package-lock.json
+notes-data.json
+yarn.lock
+node_modules
+playground
+.env
