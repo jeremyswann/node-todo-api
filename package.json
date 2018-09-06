@@ -11,12 +11,18 @@
     "mongoose": "^5.2.13"
   },
   "scripts": {
-    "serve": "node app"
+    "start": "node ./server/server",
+    "dev": "nodemon ./server/server",
+    "test": "jest",
+    "test-watch": "nodemon --exec \"yarn test\""
   },
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
-    "prettier": "^1.11.1"
+    "jest": "^23.5.0",
+    "nodemon": "^1.18.4",
+    "prettier": "^1.11.1",
+    "supertest": "^3.2.0"
   }
 }
