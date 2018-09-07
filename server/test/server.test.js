@@ -1,25 +1,30 @@
+const expect = require('expect')
 const request = require('supertest')
+const { ObjectID } = require('mongodb')
 
 const { app } = require('./../../app')
 const { Todo } = require('./../models/todo')
 
 const todos = [
 	{
+		_id: new ObjectID(),
 		text: 'First todo',
 	},
 	{
+		_id: new ObjectID(),
 		text: 'Second todo',
 	},
 ]
 
+beforeEach(done => {
+	Todo.deleteMany({})
+		.then(() => {
+			return Todo.insertMany(todos)
+		})
+		.then(() => done())
+})
+
 describe('POST /todos', () => {
-	beforeEach(done => {
-		Todo.deleteMany({})
-			.then(() => {
-				return Todo.insertMany(todos)
-			})
-			.then(() => done())
-	})
 	test('Should create a new todo', done => {
 		const text = 'Test todo text'
 		return request(app)
@@ -61,9 +66,6 @@ describe('POST /todos', () => {
 					.catch(err => done(err))
 			})
 	})
-	afterAll(done => {
-		Todo.disconnect({}).then(() => done())
-	})
 })
 
 describe('GET /todos', () => {
@@ -76,4 +78,21 @@ describe('GET /todos', () => {
 			})
 			.end(done)
 	})
+})
+
+describe('GET /todos/:id', () => {
+	test('Should return todo doc', done => {
+		console.log(`/todos/${todos[0]._id.toHexString()}`)
+		return request(app)
+			.get(`/todos/${todos[0]._id.toHexString()}`)
+			.expect(200)
+			.expect(res => {
+				expect(res.body.todo.text).toEqual(todos[0].text)
+			})
+			.end(done)
+	})
+})
+
+afterAll(done => {
+	done()
 })
