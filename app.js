@@ -52,7 +52,7 @@ app.get('/todos/:id', (req, res) => {
 			}
 			res.status(200).send({ todo })
 		})
-		.catch(e => console.log(e))
+		.catch(e => res.status(404).send(e))
 })
 
 // app.update(('/todos', id, (req,res) => {

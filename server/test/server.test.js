@@ -82,13 +82,26 @@ describe('GET /todos', () => {
 
 describe('GET /todos/:id', () => {
 	test('Should return todo doc', done => {
-		console.log(`/todos/${todos[0]._id.toHexString()}`)
+		// console.log(`/todos/${todos[0]._id.toHexString()}`)
 		return request(app)
 			.get(`/todos/${todos[0]._id.toHexString()}`)
 			.expect(200)
 			.expect(res => {
 				expect(res.body.todo.text).toEqual(todos[0].text)
 			})
+			.end(done)
+	})
+	test('Should return 404 if not found', done => {
+		const hexID = new ObjectID().toHexString()
+		return request(app)
+			.get(`/todos/${hexID}`)
+			.expect(404)
+			.end(done)
+	})
+	test('Should return 404 for non-object ids', done => {
+		return request(app)
+			.get(`/todos/123abc`)
+			.expect(404)
 			.end(done)
 	})
 })
