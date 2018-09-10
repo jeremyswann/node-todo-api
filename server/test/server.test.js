@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const expect = require('expect')
 const request = require('supertest')
 const { ObjectID } = require('mongodb')
@@ -138,6 +139,43 @@ describe('DELETE /todos/:id', () => {
 	test('Should return 404 for non-object ids', done => {
 		return request(app)
 			.delete(`/todos/123abc`)
+			.expect(404)
+			.end(done)
+	})
+})
+
+describe('UPDATE /todos/:id', () => {
+	test('Should remove a todo doc', done => {
+		const hexID = todos[1]._id.toHexString()
+		return request(app)
+			.patch(`/todos/${hexID}`)
+			.expect(200)
+			.expect(res => {
+				expect(res.body.todo._id).toEqual(hexID)
+			})
+			.end((err, res) => {
+				if (err) {
+					return done(err)
+				}
+
+				Todo.findById(hexID)
+					.then(todo => {
+						expect(todo).toBeFalsy()
+						done()
+					})
+					.catch(err => done(err))
+			})
+	})
+	test('Should return 404 if not found', done => {
+		const hexID = new ObjectID().toHexString()
+		return request(app)
+			.patch(`/todos/${hexID}`)
+			.expect(404)
+			.end(done)
+	})
+	test('Should return 404 for non-object ids', done => {
+		return request(app)
+			.patch(`/todos/123abc`)
 			.expect(404)
 			.end(done)
 	})
