@@ -3,6 +3,7 @@ const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')
 const { ObjectID } = require('mongodb')
+const jwt = require('jsonwebtoken')
 
 const { mongoose } = require('./server/db/mongoose')
 const { Todo } = require('./server/models/todo')
@@ -26,6 +27,7 @@ app.post('/todos', (req, res) => {
 	)
 })
 
+// *
 app.get('/todos', (req, res) => {
 	Todo.find().then(
 		todos => {
@@ -37,7 +39,7 @@ app.get('/todos', (req, res) => {
 	)
 })
 
-// GET /todos/:ID
+// * GET /todos by ID
 app.get('/todos/:id', (req, res) => {
 	const id = req.params.id
 
@@ -58,7 +60,7 @@ app.get('/todos/:id', (req, res) => {
 		.catch(e => res.status(404).send(e))
 })
 
-// UPDATE /todos/:ID
+// * UPDATE /todos by ID
 app.patch('/todos/:id', (req, res) => {
 	const id = req.params.id
 	const body = _.pick(req.body, ['text', 'completed'])
@@ -84,16 +86,12 @@ app.patch('/todos/:id', (req, res) => {
 		.catch(e => res.status(404).send(e))
 })
 
+// * DELETE /todos by ID
 app.delete('/todos/:id', (req, res) => {
 	const id = req.params.id
-
-	// Validate id using isValid
-	// 404 - send back empty send
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
-
-	// findById
 	Todo.findByIdAndRemove(id)
 		.then(todo => {
 			if (!todo) {
@@ -102,6 +100,22 @@ app.delete('/todos/:id', (req, res) => {
 			res.status(200).send({ todo })
 		})
 		.catch(e => res.status(404).send(e))
+})
+
+// * POST /users
+app.post('/users', (req, res) => {
+	const body = _.pick(req.body, ['email', 'password'])
+	const user = new User(body)
+
+	user
+		.save()
+		.then(() => {
+			return user.generateAuthToken()
+		})
+		.then(token => {
+			res.header('x-auth', token).send(user)
+		})
+		.catch(e => res.status(400).send(e))
 })
 
 module.exports = { app }

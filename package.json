@@ -7,9 +7,11 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.10",
     "mongodb": "^3.1.4",
-    "mongoose": "^5.2.13"
+    "mongoose": "^5.2.13",
+    "validator": "^10.7.1"
   },
   "scripts": {
     "start": "node ./server/server",
@@ -18,6 +20,7 @@
     "test-watch": "nodemon --exec \"yarn test\""
   },
   "devDependencies": {
+    "crypto-js": "^3.1.9-1",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
