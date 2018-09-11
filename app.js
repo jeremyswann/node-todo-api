@@ -1,18 +1,27 @@
 require('./server/config')
+
+// * PACKAGES
 const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')
 const { ObjectID } = require('mongodb')
-const jwt = require('jsonwebtoken')
 
+// * DATABASE
 const { mongoose } = require('./server/db/mongoose')
+
+// * MODELS
 const { Todo } = require('./server/models/todo')
 const { User } = require('./server/models/user')
 
+// * MIDDLEWARE
+const { authenticate } = require('./server/middleware/authenticate')
+
+// * DEFINE APP
 const app = express()
 
 app.use(bodyParser.json())
 
+// * POST /todos
 app.post('/todos', (req, res) => {
 	const todo = new Todo({
 		text: req.body.text,
@@ -27,7 +36,7 @@ app.post('/todos', (req, res) => {
 	)
 })
 
-// *
+// * GET /todos
 app.get('/todos', (req, res) => {
 	Todo.find().then(
 		todos => {
@@ -43,13 +52,10 @@ app.get('/todos', (req, res) => {
 app.get('/todos/:id', (req, res) => {
 	const id = req.params.id
 
-	// Validate id using isValid
-	// 404 - send back empty send
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
 
-	// findById
 	Todo.findById(id)
 		.then(todo => {
 			if (!todo) {
@@ -89,9 +95,11 @@ app.patch('/todos/:id', (req, res) => {
 // * DELETE /todos by ID
 app.delete('/todos/:id', (req, res) => {
 	const id = req.params.id
+
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
+
 	Todo.findByIdAndRemove(id)
 		.then(todo => {
 			if (!todo) {
@@ -116,6 +124,10 @@ app.post('/users', (req, res) => {
 			res.header('x-auth', token).send(user)
 		})
 		.catch(e => res.status(400).send(e))
+})
+
+app.get('/users/me', authenticate, (req, res) => {
+	res.send(req.user)
 })
 
 module.exports = { app }
