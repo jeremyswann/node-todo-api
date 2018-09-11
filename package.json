@@ -14,7 +14,7 @@
   "scripts": {
     "start": "node ./server/server",
     "dev": "nodemon ./server/server",
-    "test": "jest",
+    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && jest",
     "test-watch": "nodemon --exec \"yarn test\""
   },
   "devDependencies": {

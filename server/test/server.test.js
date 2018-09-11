@@ -146,7 +146,7 @@ describe('DELETE /todos/:id', () => {
 
 describe('UPDATE /todos/:id', () => {
 	test('Should remove a todo doc', done => {
-		const hexID = todos[1]._id.toHexString()
+		const hexID = todos[0]._id.toHexString()
 		return request(app)
 			.patch(`/todos/${hexID}`)
 			.expect(200)
@@ -160,7 +160,7 @@ describe('UPDATE /todos/:id', () => {
 
 				Todo.findById(hexID)
 					.then(todo => {
-						expect(todo).toBeFalsy()
+						expect(todo).toBeTruthy()
 						done()
 					})
 					.catch(err => done(err))
@@ -179,8 +179,4 @@ describe('UPDATE /todos/:id', () => {
 			.expect(404)
 			.end(done)
 	})
-})
-
-afterAll(done => {
-	done()
 })
