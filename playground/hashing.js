@@ -13,10 +13,6 @@ bcrypt.genSalt(10, (err, salt) => {
 	})
 })
 
-const hashed = '$2a$10$szMRNVR9HVtKh3.UVOH7hO0gbNfjJAcuKudiYytqg.NfuU0w03z3u'
-
-// const hash = bcrypt.hashSync(pass, 8)
-
 // * Javascript Web Tokens
 // const data = {
 // 	id: 10,

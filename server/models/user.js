@@ -5,7 +5,6 @@ const _ = require('lodash')
 const bcrypt = require('bcryptjs')
 
 const schema = new mongoose.Schema({
-	// name: { type: String, required: true, minlength: 1, trim: true },
 	email: {
 		type: String,
 		required: true,
@@ -32,35 +31,31 @@ const schema = new mongoose.Schema({
 	],
 })
 
-// Instance (user) Methods = statics
+// * Instance (user) Methods === methods
 schema.methods.toJSON = function() {
 	const user = this
 	const userObject = user.toObject()
-
 	return _.pick(userObject, ['_id', 'email'])
 }
-
 schema.methods.generateAuthToken = function() {
 	const user = this
 	const access = 'auth'
 	const token = jwt
-		.sign({ _id: user._id.toHexString(), access }, 'Swan503eb!')
+		.sign({ _id: user._id.toHexString(), access }, 'abc123!')
 		.toString()
-
 	user.tokens = user.tokens.concat([{ access, token }])
-
 	return user.save().then(() => {
 		return token
 	})
 }
 
-// Model (User) Methods = statics
+// * Model (User) Methods === statics
 schema.statics.findByToken = function(token) {
 	const User = this
 	let decoded
 
 	try {
-		decoded = jwt.verify(token, 'Swan503eb!')
+		decoded = jwt.verify(token, 'abc123!')
 	} catch (e) {
 		return Promise.reject()
 	}
@@ -88,26 +83,5 @@ schema.pre('save', function(next) {
 })
 
 const User = mongoose.model('User', schema)
-
-// const newUser = new User({
-// 	// name: 'Jeremy',
-// 	email: 'jeremy.swanborough@q.c',
-// 	password: 'Swan503eb!',
-// 	tokens: [
-// 		{
-// 			access: 'auth',
-// 			token: 'poewr5ypo453jgo3p53jo3jp3ojgpojgae54g57a#%ua4',
-// 		},
-// 	],
-// })
-
-// newUser.save().then(
-// 	doc => {
-// 		console.log('Saved Todo', JSON.stringify(doc, undefined, 2))
-// 	},
-// 	err => {
-// 		console.log('Unable to save Todo', JSON.stringify(err, undefined, 2))
-// 	}
-// )
 
 module.exports = { User }
